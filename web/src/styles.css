@@ -11,19 +11,160 @@ body {
 .hello-widget {
   display: grid;
   place-items: center;
-  padding: 32px 24px;
+  padding: 28px 22px;
 }
 
-.hello-text {
-  color: #7b2cff;
-  font-size: 28px;
+.magic-card {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  align-items: center;
+  justify-items: center;
+  padding: 28px 28px 22px;
+  width: min(360px, 90vw);
+  border-radius: 24px;
+  background:
+    radial-gradient(120% 120% at 20% 10%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6) 40%, rgba(255, 255, 255, 0.2) 70%, rgba(255, 255, 255, 0) 100%),
+    linear-gradient(130deg, rgba(255, 140, 87, 0.18), rgba(86, 128, 255, 0.18) 45%, rgba(171, 67, 255, 0.2) 70%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 18px 45px rgba(26, 34, 70, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+}
+
+.magic-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120px 120px at 80% 20%, rgba(255, 255, 255, 0.7), transparent 60%),
+    radial-gradient(140px 140px at 10% 80%, rgba(130, 180, 255, 0.35), transparent 70%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.magic-orbit {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
+
+.orbit {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(120, 140, 220, 0.35);
+  animation: orbit-spin 9s linear infinite;
+}
+
+.orbit-dot {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #ff8c57, #7b2cff 60%, #3a8bfd);
+  box-shadow: 0 0 12px rgba(122, 95, 255, 0.6);
+}
+
+.orbit-one {
+  animation-duration: 8s;
+}
+
+.orbit-two {
+  inset: 18px;
+  animation-duration: 11s;
+  animation-direction: reverse;
+}
+
+.orbit-three {
+  inset: 38px;
+  animation-duration: 14s;
+}
+
+.core-glow {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  border-radius: 28px;
+  background: radial-gradient(circle at 30% 30%, #ffffff, rgba(143, 87, 255, 0.75) 50%, rgba(54, 120, 255, 0.6) 70%, rgba(0, 0, 0, 0) 100%);
+  box-shadow:
+    0 0 25px rgba(123, 44, 255, 0.5),
+    0 0 60px rgba(58, 139, 253, 0.35);
+  animation: core-pulse 3.6s ease-in-out infinite;
+}
+
+.magic-text {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.magic-gradient-text {
+  font-size: clamp(20px, 2.4vw, 28px);
   font-weight: 700;
-  letter-spacing: 0.04em;
-  animation: blink 1s steps(2, start) infinite;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: linear-gradient(120deg, #ff8c57 10%, #7b2cff 45%, #3a8bfd 70%, #ff8c57 90%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shift 6s ease-in-out infinite;
 }
 
-@keyframes blink {
+.magic-subtitle {
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: rgba(30, 40, 80, 0.7);
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes orbit-spin {
   to {
-    opacity: 0;
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes core-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .magic-card {
+    width: min(320px, 92vw);
+    padding: 24px 20px 18px;
+  }
+
+  .magic-orbit {
+    width: 190px;
+    height: 190px;
   }
 }
