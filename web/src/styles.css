@@ -15,7 +15,9 @@ body {
 }
 
 .grid-card {
-  width: min(520px, 92vw);
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
   border-radius: 20px;
   padding: 18px 18px 14px;
   background:
@@ -49,7 +51,8 @@ body {
 }
 
 .grid-body {
-  height: 260px;
+  /* Responsive height inside iframe: min 180px, prefer ~40vh, cap at 320px */
+  height: clamp(180px, 40vh, 320px);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(91, 92, 226, 0.15);
@@ -82,10 +85,20 @@ body {
 
 @media (max-width: 520px) {
   .grid-card {
-    width: min(420px, 92vw);
+    width: 100%;
+    max-width: 420px;
+    padding: 14px 14px 10px;
   }
 
   .grid-body {
-    height: 240px;
+    height: clamp(160px, 38vh, 260px);
+  }
+
+  .grid-title {
+    font-size: 14px;
+  }
+
+  .grid-subtitle {
+    font-size: 11px;
   }
 }

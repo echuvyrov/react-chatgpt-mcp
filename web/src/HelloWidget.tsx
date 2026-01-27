@@ -22,7 +22,8 @@ export default function HelloWidget() {
       field: "score",
       headerName: "Score",
       type: "number",
-      width: 110,
+      flex: 0.5,
+      minWidth: 90,
       editable: true
     }
   ];
@@ -48,6 +49,7 @@ export default function HelloWidget() {
               columns={columns}
               disableRowSelectionOnClick
               hideFooter
+              density="compact"
             />
           </div>
         </div>
