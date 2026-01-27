@@ -1,59 +1,95 @@
 import "./styles.css";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import {
+  KanbanComponent,
+  ColumnsDirective,
+  ColumnDirective
+} from "@syncfusion/ej2-react-kanban";
+
+const sprintData = [
+  {
+    Id: 1,
+    Title: "Sprint planning",
+    Status: "Backlog",
+    Summary: "Define sprint goal and prioritize top items.",
+    Assignee: "Nova",
+    Tags: "Planning",
+    RankId: 1
+  },
+  {
+    Id: 2,
+    Title: "Story grooming",
+    Status: "Backlog",
+    Summary: "Refine acceptance criteria for core stories.",
+    Assignee: "Lyra",
+    Tags: "Refinement",
+    RankId: 2
+  },
+  {
+    Id: 3,
+    Title: "Auth API",
+    Status: "In Progress",
+    Summary: "Implement OAuth handshake and token refresh.",
+    Assignee: "Orion",
+    Tags: "Backend",
+    RankId: 1
+  },
+  {
+    Id: 4,
+    Title: "Kanban UI polish",
+    Status: "In Progress",
+    Summary: "Add swimlanes, WIP limits, and styling.",
+    Assignee: "Echo",
+    Tags: "Frontend",
+    RankId: 2
+  },
+  {
+    Id: 5,
+    Title: "QA checklist",
+    Status: "Review",
+    Summary: "Create regression checklist for release.",
+    Assignee: "Lyra",
+    Tags: "QA",
+    RankId: 1
+  },
+  {
+    Id: 6,
+    Title: "Release notes",
+    Status: "Done",
+    Summary: "Draft and circulate sprint release notes.",
+    Assignee: "Nova",
+    Tags: "Docs",
+    RankId: 1
+  }
+];
 
 export default function HelloWidget() {
-  const theme = createTheme({
-    palette: {
-      mode: "light",
-      primary: { main: "#5b5ce2" },
-      secondary: { main: "#ff8c57" }
-    },
-    typography: {
-      fontFamily: "\"Futura\", \"Avenir Next\", \"Helvetica Neue\", sans-serif"
-    }
-  });
-
-  const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", flex: 1, editable: true },
-    { field: "role", headerName: "Role", flex: 1, editable: true },
-    { field: "status", headerName: "Status", flex: 1, editable: true },
-    {
-      field: "score",
-      headerName: "Score",
-      type: "number",
-      flex: 0.5,
-      minWidth: 90,
-      editable: true
-    }
-  ];
-
-  const rows = [
-    { id: 1, name: "Nova", role: "Navigator", status: "Active", score: 94 },
-    { id: 2, name: "Echo", role: "Strategist", status: "Queued", score: 88 },
-    { id: 3, name: "Lyra", role: "Builder", status: "Active", score: 91 },
-    { id: 4, name: "Orion", role: "Watcher", status: "Paused", score: 76 }
-  ];
-
   return (
-    <ThemeProvider theme={theme}>
-      <div className="hello-widget">
-        <div className="grid-card">
-          <div className="grid-header">
-            <span className="grid-title">Hello World Console</span>
-            <span className="grid-subtitle">Editable MUI X Data Grid</span>
-          </div>
-          <div className="grid-body">
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              disableRowSelectionOnClick
-              hideFooter
-              density="compact"
-            />
-          </div>
-        </div>
+    <div className="hello-widget">
+      <div className="board-card">
+        <header className="board-header">
+          <div className="board-title">Sprint Command</div>
+          <div className="board-subtitle">Agile task board · Syncfusion Kanban</div>
+        </header>
+        <KanbanComponent
+          id="sprint-board"
+          keyField="Status"
+          dataSource={sprintData}
+          swimlaneSettings={{ keyField: "Assignee" }}
+          cardSettings={{
+            headerField: "Title",
+            contentField: "Summary",
+            tagsField: "Tags"
+          }}
+          height="360px"
+        >
+          <ColumnsDirective>
+            <ColumnDirective headerText="Backlog" keyField="Backlog" />
+            <ColumnDirective headerText="In Progress" keyField="In Progress" />
+            <ColumnDirective headerText="Review" keyField="Review" />
+            <ColumnDirective headerText="Done" keyField="Done" />
+          </ColumnsDirective>
+        </KanbanComponent>
       </div>
-    </ThemeProvider>
+    </div>
   );
 }

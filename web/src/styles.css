@@ -1,3 +1,11 @@
+@import "@syncfusion/ej2-base/styles/material.css";
+@import "@syncfusion/ej2-buttons/styles/material.css";
+@import "@syncfusion/ej2-layouts/styles/material.css";
+@import "@syncfusion/ej2-inputs/styles/material.css";
+@import "@syncfusion/ej2-navigations/styles/material.css";
+@import "@syncfusion/ej2-popups/styles/material.css";
+@import "@syncfusion/ej2-react-kanban/styles/material.css";
+
 :root {
   color-scheme: light;
 }
@@ -11,94 +19,81 @@ body {
 .hello-widget {
   display: grid;
   place-items: center;
-  padding: 22px;
+  padding: 20px;
 }
 
-.grid-card {
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  border-radius: 20px;
-  padding: 18px 18px 14px;
+.board-card {
+  width: min(780px, 94vw);
+  border-radius: 22px;
+  padding: 16px 18px 18px;
   background:
-    radial-gradient(120% 120% at 10% 0%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.6) 35%, rgba(255, 255, 255, 0.15) 70%, rgba(255, 255, 255, 0) 100%),
-    linear-gradient(140deg, rgba(255, 140, 87, 0.18), rgba(91, 92, 226, 0.22) 55%, rgba(58, 139, 253, 0.2));
-  border: 1px solid rgba(255, 255, 255, 0.7);
+    radial-gradient(140% 120% at 0% 0%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.6) 35%, rgba(255, 255, 255, 0.2) 70%, rgba(255, 255, 255, 0) 100%),
+    linear-gradient(135deg, rgba(255, 140, 87, 0.18), rgba(91, 92, 226, 0.2) 45%, rgba(58, 139, 253, 0.22));
+  border: 1px solid rgba(255, 255, 255, 0.75);
   box-shadow:
-    0 18px 45px rgba(26, 34, 70, 0.18),
+    0 20px 50px rgba(26, 34, 70, 0.2),
     inset 0 1px 1px rgba(255, 255, 255, 0.8);
 }
 
-.grid-header {
-  display: grid;
+.board-header {
+  display: flex;
+  flex-direction: column;
   gap: 4px;
   margin-bottom: 12px;
-  text-align: left;
 }
 
-.grid-title {
-  font-size: 16px;
+.board-title {
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #1b1f3b;
 }
 
-.grid-subtitle {
+.board-subtitle {
   font-size: 12px;
   letter-spacing: 0.06em;
   color: rgba(27, 31, 59, 0.55);
 }
 
-.grid-body {
-  /* Responsive height inside iframe: min 180px, prefer ~40vh, cap at 320px */
-  height: clamp(180px, 40vh, 320px);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(91, 92, 226, 0.15);
+#sprint-board {
+  border-radius: 16px;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(91, 92, 226, 0.18);
 }
 
-.grid-body .MuiDataGrid-root {
-  border: none;
+#sprint-board .e-kanban-content {
   background: transparent;
-  font-size: 13px;
 }
 
-.grid-body .MuiDataGrid-columnHeaders {
-  background: rgba(91, 92, 226, 0.08);
+#sprint-board .e-kanban-header {
+  background: rgba(91, 92, 226, 0.12);
   border-bottom: 1px solid rgba(91, 92, 226, 0.15);
 }
 
-.grid-body .MuiDataGrid-cell {
-  border-bottom: 1px solid rgba(91, 92, 226, 0.08);
+#sprint-board .e-card {
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(26, 34, 70, 0.12);
+  border: 1px solid rgba(91, 92, 226, 0.12);
 }
 
-.grid-body .MuiDataGrid-cell:focus,
-.grid-body .MuiDataGrid-columnHeader:focus {
-  outline: none;
+#sprint-board .e-card-header-caption {
+  font-weight: 600;
+  color: #1b1f3b;
 }
 
-.grid-body .MuiDataGrid-row:hover {
-  background: rgba(255, 140, 87, 0.06);
+#sprint-board .e-card-content {
+  color: rgba(27, 31, 59, 0.7);
 }
 
-@media (max-width: 520px) {
-  .grid-card {
-    width: 100%;
-    max-width: 420px;
-    padding: 14px 14px 10px;
-  }
+#sprint-board .e-kanban-swimlane-header {
+  background: rgba(255, 140, 87, 0.08);
+  color: #1b1f3b;
+}
 
-  .grid-body {
-    height: clamp(160px, 38vh, 260px);
-  }
-
-  .grid-title {
-    font-size: 14px;
-  }
-
-  .grid-subtitle {
-    font-size: 11px;
+@media (max-width: 720px) {
+  .board-card {
+    padding: 14px 14px 16px;
   }
 }
