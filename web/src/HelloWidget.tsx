@@ -1,28 +1,57 @@
 import "./styles.css";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 export default function HelloWidget() {
+  const theme = createTheme({
+    palette: {
+      mode: "light",
+      primary: { main: "#5b5ce2" },
+      secondary: { main: "#ff8c57" }
+    },
+    typography: {
+      fontFamily: "\"Futura\", \"Avenir Next\", \"Helvetica Neue\", sans-serif"
+    }
+  });
+
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Name", flex: 1, editable: true },
+    { field: "role", headerName: "Role", flex: 1, editable: true },
+    { field: "status", headerName: "Status", flex: 1, editable: true },
+    {
+      field: "score",
+      headerName: "Score",
+      type: "number",
+      width: 110,
+      editable: true
+    }
+  ];
+
+  const rows = [
+    { id: 1, name: "Nova", role: "Navigator", status: "Active", score: 94 },
+    { id: 2, name: "Echo", role: "Strategist", status: "Queued", score: 88 },
+    { id: 3, name: "Lyra", role: "Builder", status: "Active", score: 91 },
+    { id: 4, name: "Orion", role: "Watcher", status: "Paused", score: 76 }
+  ];
+
   return (
-    <div className="hello-widget">
-      <div className="magic-card" role="presentation">
-        <div className="magic-orbit">
-          <div className="orbit orbit-one">
-            <span className="orbit-dot" />
+    <ThemeProvider theme={theme}>
+      <div className="hello-widget">
+        <div className="grid-card">
+          <div className="grid-header">
+            <span className="grid-title">Hello World Console</span>
+            <span className="grid-subtitle">Editable MUI X Data Grid</span>
           </div>
-          <div className="orbit orbit-two">
-            <span className="orbit-dot" />
+          <div className="grid-body">
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              disableRowSelectionOnClick
+              hideFooter
+            />
           </div>
-          <div className="orbit orbit-three">
-            <span className="orbit-dot" />
-          </div>
-          <div className="core-glow" />
-        </div>
-        <div className="magic-text">
-          <span className="magic-gradient-text" aria-live="polite">
-            Hello World, Magic UI vibes!
-          </span>
-          <span className="magic-subtitle">Magic UI vibes, powered up.</span>
         </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
