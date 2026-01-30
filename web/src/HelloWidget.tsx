@@ -3,7 +3,7 @@ import { CanvasRenderer } from "declarative-ui-core";
 import { useEffect, useState } from "react";
 import type { Page } from "declarative-ui-core";
 
-/* TEST DATA - Commented out, uncomment for local testing
+// TEST DATA - for testing with ChatGPT apps
 const testComponentData: Page = {
   layout: {
     engine: "rgl",
@@ -15,8 +15,7 @@ const testComponentData: Page = {
       { i: "header", x: 0, y: 0, w: 24, h: 2 },
       { i: "chart1", x: 0, y: 2, w: 12, h: 8 },
       { i: "chart2", x: 12, y: 2, w: 12, h: 8 },
-      { i: "markdown1", x: 0, y: 10, w: 12, h: 10 },
-      { i: "mermaid1", x: 12, y: 10, w: 12, h: 10 }
+      { i: "markdown1", x: 0, y: 10, w: 24, h: 10 }
     ]
   },
   components: {
@@ -69,32 +68,14 @@ const testComponentData: Page = {
     markdown1: {
       type: "markdown",
       config: {
-        md: "## Features Tested\n\nVegaLite Charts (Bar and Line)\n\nMarkdown Rendering\n\nMermaid Diagrams\n\nGrid Layout\n\n**Status:** All components working!"
-      }
-    },
-    mermaid1: {
-      type: "mermaid",
-      config: {
-        mermaid: "graph TD\n  A[Start] --> B[Process]\n  B --> C[End]"
+        md: "## Features Tested\n\nVegaLite Charts (Bar and Line)\n\nMarkdown Rendering\n\nGrid Layout\n\n**Status:** All components working!"
       }
     }
   },
   data: {}
 };
-*/
 
-const defaultComponentData: Page = {
-  layout: {
-    engine: "rgl",
-    cols: 24,
-    rowHeight: Math.floor((window.innerHeight - 100) / 20),
-    margin: [16, 16],
-    containerPadding: [16, 16],
-    items: []
-  },
-  components: {},
-  data: {}
-};
+const defaultComponentData: Page = testComponentData;
 
 export default function DeclarativeUIWidget() {
   const [componentData, setComponentData] = useState<Page>(defaultComponentData);
