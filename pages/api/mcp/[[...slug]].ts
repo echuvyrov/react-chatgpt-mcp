@@ -72,8 +72,22 @@ function createDeclarativeUIServer() {
         "Renders a declarative UI component from a JSON definition. Accepts a JSON object defining the component structure.",
       inputSchema: z.object({
         componentData: z.object({
-          layout: z.array(z.any()),
-          components: z.record(z.any())
+          layout: z.object({
+            engine: z.string().optional(),
+            cols: z.number().optional(),
+            rowHeight: z.number().optional(),
+            margin: z.array(z.number()).optional(),
+            containerPadding: z.array(z.number()).optional(),
+            items: z.array(z.object({
+              i: z.string(),
+              x: z.number(),
+              y: z.number(),
+              w: z.number(),
+              h: z.number()
+            }))
+          }),
+          components: z.record(z.any()),
+          data: z.record(z.any()).optional()
         }).describe("JSON object defining the declarative UI component with layout and components")
       }),
       _meta: {
