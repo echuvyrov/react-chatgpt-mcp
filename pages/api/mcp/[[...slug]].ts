@@ -126,49 +126,67 @@ function createDeclarativeUIServer() {
       }
     },
     async (args) => {
-      if (!openai) {
-        return {
-          content: [{ type: "text", text: "Error: OPENAI_API_KEY environment variable not set. Cannot generate UI." }],
-          isError: true
-        };
-      }
-
-      const apiKey = process.env.OPENAI_API_KEY!;
-
-      const result = await generateDeclarativeUiJson({
-        userPrompt: args.prompt,
-        currentPage: null,
-        apiKey
-      });
-
-      if (!result.ok) {
-        const errorMsg = `Failed to generate UI: ${result.error}${result.raw ? `\n\nRaw response:\n${result.raw}` : ""}`;
-        return {
-          content: [{ type: "text", text: errorMsg }],
-          isError: true
-        };
-      }
-
-      console.log("[MCP] === GENERATE_DECLARATIVE_UI RESPONSE ===");
-      console.log("[MCP] Generated UI with components:", Object.keys(result.uiJson.components));
-      console.log("[MCP] Full uiJson structure:", JSON.stringify(result.uiJson, null, 2));
-      
-      const response = {
-        content: [{ type: "text" as const, text: "Declarative UI generated and rendered successfully" }],
-        structuredContent: {
-          componentData: result.uiJson
-        },
-        _meta: {
-          "openai/outputTemplate": WIDGET_URI
+      try {
+        console.log("[MCP] === GENERATE_DECLARATIVE_UI CALLED ===");
+        console.log("[MCP] Args:", args);
+        
+        if (!openai) {
+          console.log("[MCP] ERROR: No OpenAI API key");
+          return {
+            content: [{ type: "text", text: "Error: OPENAI_API_KEY environment variable not set. Cannot generate UI." }],
+            isError: true
+          };
         }
-      };
-      
-      console.log("[MCP] Response structure:");
-      console.log("[MCP]   - content:", response.content);
-      console.log("[MCP]   - structuredContent.componentData keys:", Object.keys(response.structuredContent.componentData));
-      console.log("[MCP]   - _meta.openai/outputTemplate:", response._meta["openai/outputTemplate"]);
-      
-      return response;
+
+        const apiKey = process.env.OPENAI_API_KEY!;
+        console.log("[MCP] Calling generateDeclarativeUiJson...");
+
+        const result = await generateDeclarativeUiJson({
+          userPrompt: args.prompt,
+          currentPage: null,
+          apiKey
+        });
+
+        console.log("[MCP] generateDeclarativeUiJson returned, ok:", result.ok);
+
+        if (!result.ok) {
+          console.log("[MCP] ERROR: Generation failed:", result.error);
+          const errorMsg = `Failed to generate UI: ${result.error}${result.raw ? `\n\nRaw response:\n${result.raw}` : ""}`;
+          return {
+            content: [{ type: "text", text: errorMsg }],
+            isError: true
+          };
+        }
+
+        console.log("[MCP] === GENERATE_DECLARATIVE_UI RESPONSE ===");
+        console.log("[MCP] Generated UI with components:", Object.keys(result.uiJson.components));
+        console.log("[MCP] Full uiJson structure:", JSON.stringify(result.uiJson, null, 2));
+        
+        const response = {
+          content: [{ type: "text" as const, text: "Declarative UI generated and rendered successfully" }],
+          structuredContent: {
+            componentData: result.uiJson
+          },
+          _meta: {
+            "openai/outputTemplate": WIDGET_URI
+          }
+        };
+        
+        console.log("[MCP] Response structure:");
+        console.log("[MCP]   - content:", response.content);
+        console.log("[MCP]   - structuredContent.componentData keys:", Object.keys(response.structuredContent.componentData));
+        console.log("[MCP]   - _meta.openai/outputTemplate:", response._meta["openai/outputTemplate"]);
+        
+        return response;
+      } catch (error) {
+        console.error("[MCP] === EXCEPTION IN GENERATE_DECLARATIVE_UI ===");
+        console.error("[MCP] Error:", error);
+        console.error("[MCP] Stack:", error instanceof Error ? error.stack : "N/A");
+        return {
+          content: [{ type: "text", text: `Internal error: ${error instanceof Error ? error.message : String(error)}` }],
+          isError: true
+        };
+      }
     }
   );
 
