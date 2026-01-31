@@ -154,7 +154,7 @@ function createDeclarativeUIServer() {
       return {
         content: [{ type: "text", text: "Declarative UI generated and rendered successfully" }],
         structuredContent: {
-          ui: result.uiJson
+          componentData: result.uiJson
         },
         _meta: {
           "openai/outputTemplate": WIDGET_URI

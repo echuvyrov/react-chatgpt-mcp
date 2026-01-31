@@ -44,9 +44,9 @@ export default function DeclarativeUIWidget() {
         toolOutput: openai.toolOutput
       });
       
-      if (openai?.toolOutput?.ui) {
-        console.log("[Widget] Found toolOutput.ui, updating component data");
-        setComponentData(openai.toolOutput.ui);
+      if (openai?.toolOutput?.componentData) {
+        console.log("[Widget] Found toolOutput.componentData, updating component data");
+        setComponentData(openai.toolOutput.componentData);
       }
     };
 
