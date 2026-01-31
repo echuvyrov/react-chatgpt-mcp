@@ -55,7 +55,14 @@ function createDeclarativeUIServer() {
           uri: WIDGET_URI,
           mimeType: "text/html+skybridge",
           text: widgetHtml,
-          _meta: { "openai/widgetPrefersBorder": false }
+          _meta: { 
+            "openai/widgetPrefersBorder": false,
+            "openai/widgetCSP": {
+              "script_src": ["'unsafe-inline'", "'unsafe-eval'"],
+              "style_src": ["'unsafe-inline'"],
+              "connect_src": ["*"]
+            }
+          }
         }
       ]
     };
