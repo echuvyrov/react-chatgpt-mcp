@@ -27,8 +27,12 @@ const emptyState: Page = {
   data: {}
 };
 
+// Read initial data from window.openai.toolOutput at module load time (before React mounts)
+const initialData: Page = (window as any).openai?.toolOutput?.componentData ?? emptyState;
+console.log("[Widget] Initial data from window.openai.toolOutput:", initialData);
+
 export default function DeclarativeUIWidget() {
-  const [componentData, setComponentData] = useState<Page>(emptyState);
+  const [componentData, setComponentData] = useState<Page>(initialData);
 
   useEffect(() => {
     console.log("[Widget] Component mounted");
