@@ -28,35 +28,61 @@ const emptyState: Page = {
 };
 
 // Read initial data from window.openai.toolOutput at module load time (before React mounts)
+console.log("[Widget] === DEBUGGING WINDOW.OPENAI ===");
+console.log("[Widget] window.openai exists?", !!(window as any).openai);
+console.log("[Widget] window.openai:", (window as any).openai);
+console.log("[Widget] window.openai.toolOutput:", (window as any).openai?.toolOutput);
+console.log("[Widget] window.openai.toolOutput.componentData:", (window as any).openai?.toolOutput?.componentData);
+
 const initialData: Page = (window as any).openai?.toolOutput?.componentData ?? emptyState;
-console.log("[Widget] Initial data from window.openai.toolOutput:", initialData);
+console.log("[Widget] Initial data selected:", initialData === emptyState ? "EMPTY STATE" : "HAS DATA");
+if (initialData !== emptyState) {
+  console.log("[Widget] Initial data components:", Object.keys(initialData.components));
+}
 
 export default function DeclarativeUIWidget() {
   const [componentData, setComponentData] = useState<Page>(initialData);
 
   useEffect(() => {
-    console.log("[Widget] Component mounted");
+    console.log("[Widget] === COMPONENT MOUNTED ===");
+    console.log("[Widget] Current componentData state:", componentData);
+    console.log("[Widget] Is showing empty state?", componentData === emptyState);
     
-    // Initial load from window.openai.toolOutput
+    // Check window.openai again after mount
     const openai = (window as any).openai;
+    console.log("[Widget] window.openai after mount:", openai);
+    console.log("[Widget] window.openai.toolOutput after mount:", openai?.toolOutput);
+    
     if (openai?.toolOutput?.componentData) {
-      console.log("[Widget] Initial load from toolOutput.componentData");
+      console.log("[Widget] ✓ Found toolOutput.componentData after mount, updating state");
+      console.log("[Widget] componentData keys:", Object.keys(openai.toolOutput.componentData));
       setComponentData(openai.toolOutput.componentData);
+    } else {
+      console.log("[Widget] ✗ No toolOutput.componentData found after mount");
     }
 
     // Listen for updates via openai:set_globals event (Apps SDK pattern)
     const handleSetGlobals = (event: any) => {
-      console.log("[Widget] openai:set_globals event received", event.detail);
+      console.log("[Widget] === SET_GLOBALS EVENT RECEIVED ===");
+      console.log("[Widget] Event detail:", event.detail);
       const globals = event.detail?.globals;
+      console.log("[Widget] Globals:", globals);
+      console.log("[Widget] Globals.toolOutput:", globals?.toolOutput);
+      
       if (globals?.toolOutput?.componentData) {
-        console.log("[Widget] Updating from set_globals event");
+        console.log("[Widget] ✓ Updating from set_globals event");
+        console.log("[Widget] New componentData:", globals.toolOutput.componentData);
         setComponentData(globals.toolOutput.componentData);
+      } else {
+        console.log("[Widget] ✗ No componentData in set_globals event");
       }
     };
 
+    console.log("[Widget] Registering openai:set_globals event listener");
     window.addEventListener("openai:set_globals", handleSetGlobals, { passive: true });
 
     return () => {
+      console.log("[Widget] Cleanup: removing event listener");
       window.removeEventListener("openai:set_globals", handleSetGlobals);
     };
   }, []);

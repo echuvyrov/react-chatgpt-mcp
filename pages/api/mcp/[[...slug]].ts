@@ -41,7 +41,14 @@ function createDeclarativeUIServer() {
   const server = new McpServer({ name: "declarative-ui", version: "0.1.0" });
 
   server.registerResource(WIDGET_RESOURCE_NAME, WIDGET_URI, {}, async () => {
+    console.log("[MCP] === RESOURCE REQUEST ===");
+    console.log("[MCP] Resource name:", WIDGET_RESOURCE_NAME);
+    console.log("[MCP] Resource URI:", WIDGET_URI);
+    
     const widgetHtml = loadWidgetHtml();
+    console.log("[MCP] Widget HTML length:", widgetHtml.length);
+    console.log("[MCP] Widget HTML first 200 chars:", widgetHtml.substring(0, 200));
+    
     return {
       contents: [
         {
@@ -137,10 +144,12 @@ function createDeclarativeUIServer() {
         };
       }
 
-      console.log("[generate_declarative_ui] Generated UI with components:", Object.keys(result.uiJson.components));
-
-      return {
-        content: [{ type: "text", text: "Declarative UI generated and rendered successfully" }],
+      console.log("[MCP] === GENERATE_DECLARATIVE_UI RESPONSE ===");
+      console.log("[MCP] Generated UI with components:", Object.keys(result.uiJson.components));
+      console.log("[MCP] Full uiJson structure:", JSON.stringify(result.uiJson, null, 2));
+      
+      const response = {
+        content: [{ type: "text" as const, text: "Declarative UI generated and rendered successfully" }],
         structuredContent: {
           componentData: result.uiJson
         },
@@ -148,6 +157,13 @@ function createDeclarativeUIServer() {
           "openai/outputTemplate": WIDGET_URI
         }
       };
+      
+      console.log("[MCP] Response structure:");
+      console.log("[MCP]   - content:", response.content);
+      console.log("[MCP]   - structuredContent.componentData keys:", Object.keys(response.structuredContent.componentData));
+      console.log("[MCP]   - _meta.openai/outputTemplate:", response._meta["openai/outputTemplate"]);
+      
+      return response;
     }
   );
 
