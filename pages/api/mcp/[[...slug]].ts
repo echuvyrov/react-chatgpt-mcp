@@ -61,6 +61,10 @@ function createDeclarativeUIServer() {
               "connect_domains": [
                 "https://basemaps.cartocdn.com",
                 "https://tiles.basemaps.cartocdn.com",
+                "https://tiles-a.basemaps.cartocdn.com",
+                "https://tiles-b.basemaps.cartocdn.com",
+                "https://tiles-c.basemaps.cartocdn.com",
+                "https://tiles-d.basemaps.cartocdn.com",
                 "https://maputnik.github.io",
                 "https://raw.githubusercontent.com",
                 "https://geoserveis.icgc.cat",
