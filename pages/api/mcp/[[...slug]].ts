@@ -58,9 +58,7 @@ function createDeclarativeUIServer() {
           _meta: { 
             "openai/widgetPrefersBorder": false,
             "openai/widgetCSP": {
-              "script_src": ["'unsafe-inline'", "'unsafe-eval'"],
-              "style_src": ["'unsafe-inline'"],
-              "connect_src": ["*"]
+              "connect_domains": []
             }
           }
         }
