@@ -70,7 +70,7 @@ function createDeclarativeUIServer() {
     {
       title: "Show Declarative UI Component",
       description:
-        "Renders a declarative UI component from a JSON definition. Accepts a JSON object defining the component structure.",
+        "Renders a declarative UI component from a pre-made JSON definition. Use this ONLY when you already have a complete, valid JSON object that conforms to the declarative UI schema. For creating new dashboards from natural language, use generate_declarative_ui instead.",
       inputSchema: z.object({
         componentData: z.object({
           layout: z.object({
@@ -112,7 +112,7 @@ function createDeclarativeUIServer() {
     {
       title: "Generate Declarative UI from Natural Language",
       description:
-        "Generates a declarative UI dashboard from a natural language prompt using ChatGPT. The prompt should describe the desired dashboard components, charts, maps, tables, or other visualizations. Returns a validated JSON structure and renders the UI widget.",
+        "PREFERRED TOOL for creating dashboards. Uses an AI agent with specialized knowledge of dashboard schemas to generate complex, validated UI from natural language. Handles charts (bar, line, pie, scatter), maps, tables, markdown, and mermaid diagrams. Automatically validates against schema and generates proper data structures. Use this instead of manually creating JSON when the user asks to create/build/make a dashboard or visualization.",
       inputSchema: z.object({
         prompt: z.string().describe("Natural language description of the desired dashboard or UI components"),
         keepExisting: z.boolean().optional().describe("If true, keeps existing components and adds to them. If false, replaces the entire dashboard. Default: false")
