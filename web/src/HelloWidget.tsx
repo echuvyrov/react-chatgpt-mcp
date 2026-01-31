@@ -13,14 +13,23 @@ const emptyState: Page = {
     margin: [16, 16],
     containerPadding: [16, 16],
     items: [
-      { i: "welcome", x: 0, y: 0, w: 24, h: 6 }
+      { i: "loader", x: 0, y: 0, w: 24, h: 8 }
     ]
   },
   components: {
-    welcome: {
+    loader: {
       type: "markdown",
       config: {
-        md: "# Declarative UI Widget\n\nNo dashboard loaded yet.\n\nUse the **generate_declarative_ui** tool to create a dashboard from natural language."
+        md: `<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 60px 0;">
+  <h1 style="font-size: 48px; font-weight: 300; margin: 0 0 40px 0; color: #1f2937;">AI Canvas</h1>
+  <div style="width: 80px; height: 80px; border: 8px solid #e5e7eb; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+</div>
+
+<style>
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>`
       }
     }
   },
