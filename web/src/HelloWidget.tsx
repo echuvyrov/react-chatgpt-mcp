@@ -5,36 +5,8 @@ import type { Page } from "declarative-ui-core";
 
 console.log("[Widget] Module loaded");
 
-const emptyState: Page = {
-  layout: {
-    engine: "rgl",
-    cols: 24,
-    rowHeight: 50,
-    margin: [16, 16],
-    containerPadding: [16, 16],
-    items: [
-      { i: "loader", x: 0, y: 0, w: 24, h: 8 }
-    ]
-  },
-  components: {
-    loader: {
-      type: "markdown",
-      config: {
-        md: `<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 60px 0;">
-  <h1 style="font-size: 48px; font-weight: 300; margin: 0 0 40px 0; color: #1f2937;">AI Canvas</h1>
-  <div style="width: 80px; height: 80px; border: 8px solid #e5e7eb; border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-</div>
-
-<style>
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-</style>`
-      }
-    }
-  },
-  data: {}
-};
+// Empty state marker - we'll render a custom loading component instead
+const emptyState: Page | null = null;
 
 // Read initial data from window.openai.toolOutput at module load time (before React mounts)
 console.log("[Widget] === DEBUGGING WINDOW.OPENAI ===");
@@ -43,14 +15,50 @@ console.log("[Widget] window.openai:", (window as any).openai);
 console.log("[Widget] window.openai.toolOutput:", (window as any).openai?.toolOutput);
 console.log("[Widget] window.openai.toolOutput.componentData:", (window as any).openai?.toolOutput?.componentData);
 
-const initialData: Page = (window as any).openai?.toolOutput?.componentData ?? emptyState;
+const initialData: Page | null = (window as any).openai?.toolOutput?.componentData ?? emptyState;
 console.log("[Widget] Initial data selected:", initialData === emptyState ? "EMPTY STATE" : "HAS DATA");
 if (initialData !== emptyState) {
   console.log("[Widget] Initial data components:", Object.keys(initialData.components));
 }
 
+function LoadingState() {
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100vh',
+      width: '100%',
+      backgroundColor: '#ffffff'
+    }}>
+      <h1 style={{
+        fontSize: '48px',
+        fontWeight: 300,
+        margin: '0 0 40px 0',
+        color: '#1f2937'
+      }}>
+        AI Canvas
+      </h1>
+      <div style={{
+        width: '80px',
+        height: '80px',
+        border: '8px solid #e5e7eb',
+        borderTopColor: '#3b82f6',
+        borderRadius: '50%',
+        animation: 'spin 1s linear infinite'
+      }} />
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function DeclarativeUIWidget() {
-  const [componentData, setComponentData] = useState<Page>(initialData);
+  const [componentData, setComponentData] = useState<Page | null>(initialData);
 
   useEffect(() => {
     console.log("[Widget] === COMPONENT MOUNTED ===");
@@ -95,6 +103,11 @@ export default function DeclarativeUIWidget() {
       window.removeEventListener("openai:set_globals", handleSetGlobals);
     };
   }, []);
+
+  // Show loading state if no data, otherwise render the canvas
+  if (!componentData) {
+    return <LoadingState />;
+  }
 
   return (
     <div className="declarative-ui-widget">
