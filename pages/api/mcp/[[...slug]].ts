@@ -15,6 +15,7 @@ export const config = {
 
 const MCP_METHODS = new Set(["POST", "GET", "DELETE"]);
 const WIDGET_URI = "ui://widget/declarative-ui.html";
+const WIDGET_RESOURCE_NAME = "generate_declarative_ui";
 const widgetPath = path.join(process.cwd(), "public", "widget", "index.html");
 
 let currentComponentData: any = null;
@@ -47,7 +48,7 @@ function loadWidgetHtml() {
 function createDeclarativeUIServer() {
   const server = new McpServer({ name: "declarative-ui", version: "0.1.0" });
 
-  server.registerResource("declarative-ui-widget", WIDGET_URI, {}, async () => {
+  server.registerResource(WIDGET_RESOURCE_NAME, WIDGET_URI, {}, async () => {
     const widgetHtml = loadWidgetHtml();
     return {
       contents: [
