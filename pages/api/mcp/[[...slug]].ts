@@ -149,10 +149,16 @@ function createDeclarativeUIServer() {
       }
 
       currentComponentData = result.uiJson;
+      console.log("[generate_declarative_ui] Data set, components:", Object.keys(result.uiJson.components));
 
       return {
         content: [{ type: "text", text: "Declarative UI generated and rendered successfully" }],
-        structuredContent: { componentData: result.uiJson }
+        structuredContent: {
+          ui: result.uiJson
+        },
+        _meta: {
+          "openai/outputTemplate": WIDGET_URI
+        }
       };
     }
   );

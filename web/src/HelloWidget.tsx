@@ -25,16 +25,21 @@ const emptyState: Page = {
   data: {}
 };
 
-const defaultComponentData: Page = emptyState;
-
 export default function DeclarativeUIWidget() {
-  const [componentData, setComponentData] = useState<Page>(defaultComponentData);
+  const [componentData, setComponentData] = useState<Page>(emptyState);
 
   useEffect(() => {
-    const injectedData = (window as any).__COMPONENT_DATA__;
-    if (injectedData) {
-      setComponentData(injectedData);
-    }
+    const updateFromToolOutput = () => {
+      const openai = (window as any).openai;
+      if (openai?.toolOutput?.ui) {
+        setComponentData(openai.toolOutput.ui);
+      }
+    };
+
+    updateFromToolOutput();
+
+    const interval = setInterval(updateFromToolOutput, 100);
+    return () => clearInterval(interval);
   }, []);
 
   return (
