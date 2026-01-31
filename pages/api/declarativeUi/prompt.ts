@@ -32,18 +32,8 @@ For map components in THIS app, map data MUST come from page.data via component.
 If the style does not include any layer referencing source 'data', the renderer will add a default circle layer.
 Map point rows must include longitude/latitude (or lng/lat). Rows may include color and radius, used by the default circle layer via feature properties.
 To show point labels, include a string field 'name' in each row; the renderer will display labels using that field automatically.
-For map basemaps, ALWAYS use one of the following public style.json URL strings:
+For map basemaps, ALWAYS use this public style.json URL:
 https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json
-https://basemaps.cartocdn.com/gl/voyager-nolabels-gl-style/style.json
-https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json
-https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json
-https://basemaps.cartocdn.com/gl/positron-gl-style/style.json
-https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json
-https://maputnik.github.io/osm-liberty/style.json
-https://raw.githubusercontent.com/go2garret/maps/main/src/assets/json/arcgis_hybrid.json
-https://raw.githubusercontent.com/go2garret/maps/main/src/assets/json/openStreetMap.json
-https://geoserveis.icgc.cat/contextmaps/icgc.json
-https://tiles.stadiamaps.com/styles/alidade_satellite.json
 
 Do NOT generate or modify inline MapLibre style objects, and do NOT use config.layers. If a component already has a string style URL, you MUST keep it unchanged unless the user explicitly asks to switch basemaps.
 CRITICAL for MapLibre layers (when describing behavior, not generating JSON): layer "type" must be one of: fill, line, symbol, circle, heatmap, fill-extrusion, raster, hillshade, background. NEVER use "type": "vector" in a layer - that is a source type, not a layer type.
