@@ -58,7 +58,13 @@ function createDeclarativeUIServer() {
           _meta: { 
             "openai/widgetPrefersBorder": false,
             "openai/widgetCSP": {
-              "connect_domains": []
+              "connect_domains": [
+                "basemaps.cartocdn.com",
+                "maputnik.github.io",
+                "raw.githubusercontent.com",
+                "geoserveis.icgc.cat",
+                "tiles.stadiamaps.com"
+              ]
             }
           }
         }
