@@ -29,9 +29,23 @@ export default function DeclarativeUIWidget() {
   const [componentData, setComponentData] = useState<Page>(emptyState);
 
   useEffect(() => {
+    console.log("[Widget] Mounted, checking for toolOutput...");
+    
     const updateFromToolOutput = () => {
       const openai = (window as any).openai;
+      
+      if (!openai) {
+        console.log("[Widget] window.openai not available yet");
+        return;
+      }
+      
+      console.log("[Widget] window.openai available:", {
+        hasToolOutput: !!openai.toolOutput,
+        toolOutput: openai.toolOutput
+      });
+      
       if (openai?.toolOutput?.ui) {
+        console.log("[Widget] Found toolOutput.ui, updating component data");
         setComponentData(openai.toolOutput.ui);
       }
     };
