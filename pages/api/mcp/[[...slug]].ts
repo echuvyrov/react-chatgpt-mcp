@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { generateDeclarativeUiJson } from "../declarativeUi";
 
 export const config = {
   api: {
@@ -102,6 +103,56 @@ function createDeclarativeUIServer() {
       return {
         content: [{ type: "text", text: "Declarative UI component rendered successfully" }],
         structuredContent: { componentData: args.componentData }
+      };
+    }
+  );
+
+  server.registerTool(
+    "generate_declarative_ui",
+    {
+      title: "Generate Declarative UI from Natural Language",
+      description:
+        "Generates a declarative UI dashboard from a natural language prompt using ChatGPT. The prompt should describe the desired dashboard components, charts, maps, tables, or other visualizations. Returns a validated JSON structure and renders the UI widget.",
+      inputSchema: z.object({
+        prompt: z.string().describe("Natural language description of the desired dashboard or UI components"),
+        keepExisting: z.boolean().optional().describe("If true, keeps existing components and adds to them. If false, replaces the entire dashboard. Default: false")
+      }),
+      _meta: {
+        "openai/outputTemplate": WIDGET_URI,
+        "openai/toolInvocation/invoking": "Generating Declarative UI...",
+        "openai/toolInvocation/invoked": "Declarative UI generated"
+      }
+    },
+    async (args) => {
+      if (!openai) {
+        return {
+          content: [{ type: "text", text: "Error: OPENAI_API_KEY environment variable not set. Cannot generate UI." }],
+          isError: true
+        };
+      }
+
+      const apiKey = process.env.OPENAI_API_KEY!;
+      const currentPage = args.keepExisting ? currentComponentData : null;
+
+      const result = await generateDeclarativeUiJson({
+        userPrompt: args.prompt,
+        currentPage,
+        apiKey
+      });
+
+      if (!result.ok) {
+        const errorMsg = `Failed to generate UI: ${result.error}${result.raw ? `\n\nRaw response:\n${result.raw}` : ""}`;
+        return {
+          content: [{ type: "text", text: errorMsg }],
+          isError: true
+        };
+      }
+
+      currentComponentData = result.uiJson;
+
+      return {
+        content: [{ type: "text", text: "Declarative UI generated and rendered successfully" }],
+        structuredContent: { componentData: result.uiJson }
       };
     }
   );

@@ -17,6 +17,7 @@
     "@mui/material": "^7.3.7",
     "@mui/x-data-grid": "^8.26.0",
     "@syncfusion/ej2-react-kanban": "^32.1.24",
+    "ajv": "^8.17.1",
     "declarative-ui-core": "^1.0.3",
     "maplibre-gl": "^5.0.0",
     "next": "^14.2.18",
