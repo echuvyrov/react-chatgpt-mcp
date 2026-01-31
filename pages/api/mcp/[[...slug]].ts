@@ -60,6 +60,7 @@ function createDeclarativeUIServer() {
             "openai/widgetCSP": {
               "connect_domains": [
                 "https://basemaps.cartocdn.com",
+                "https://tiles.basemaps.cartocdn.com",
                 "https://maputnik.github.io",
                 "https://raw.githubusercontent.com",
                 "https://geoserveis.icgc.cat",
