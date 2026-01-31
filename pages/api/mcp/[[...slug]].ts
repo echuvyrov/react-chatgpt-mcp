@@ -59,11 +59,11 @@ function createDeclarativeUIServer() {
             "openai/widgetPrefersBorder": false,
             "openai/widgetCSP": {
               "connect_domains": [
-                "basemaps.cartocdn.com",
-                "maputnik.github.io",
-                "raw.githubusercontent.com",
-                "geoserveis.icgc.cat",
-                "tiles.stadiamaps.com"
+                "https://basemaps.cartocdn.com",
+                "https://maputnik.github.io",
+                "https://raw.githubusercontent.com",
+                "https://geoserveis.icgc.cat",
+                "https://tiles.stadiamaps.com"
               ]
             }
           }
