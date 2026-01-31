@@ -18,8 +18,6 @@ const WIDGET_URI = "ui://widget/declarative-ui.html";
 const WIDGET_RESOURCE_NAME = "generate_declarative_ui";
 const widgetPath = path.join(process.cwd(), "public", "widget", "index.html");
 
-let currentComponentData: any = null;
-
 function loadWidgetHtml() {
   if (!existsSync(widgetPath)) {
     return `<!doctype html>
@@ -35,14 +33,8 @@ function loadWidgetHtml() {
 </html>`;
   }
 
-  let html = readFileSync(widgetPath, "utf8");
-  
-  if (currentComponentData) {
-    const dataScript = `<script>window.__COMPONENT_DATA__ = ${JSON.stringify(currentComponentData)};</script>`;
-    html = html.replace('</head>', `${dataScript}</head>`);
-  }
-  
-  return html;
+  // Return widget HTML as-is - data will be provided via window.openai.toolOutput
+  return readFileSync(widgetPath, "utf8");
 }
 
 function createDeclarativeUIServer() {
@@ -99,8 +91,6 @@ function createDeclarativeUIServer() {
       }
     },
     async (args) => {
-      currentComponentData = args.componentData;
-
       return {
         content: [{ type: "text", text: "Declarative UI component rendered successfully" }],
         structuredContent: { componentData: args.componentData }
@@ -115,8 +105,7 @@ function createDeclarativeUIServer() {
       description:
         "PREFERRED TOOL for creating dashboards. Uses an AI agent with specialized knowledge of dashboard schemas to generate complex, validated UI from natural language. Handles charts (bar, line, pie, scatter), maps, tables, markdown, and mermaid diagrams. Automatically validates against schema and generates proper data structures. Use this instead of manually creating JSON when the user asks to create/build/make a dashboard or visualization.",
       inputSchema: z.object({
-        prompt: z.string().describe("Natural language description of the desired dashboard or UI components"),
-        keepExisting: z.boolean().optional().describe("If true, keeps existing components and adds to them. If false, replaces the entire dashboard. Default: false")
+        prompt: z.string().describe("Natural language description of the dashboard or visualization to create")
       }),
       _meta: {
         "openai/outputTemplate": WIDGET_URI,
@@ -133,11 +122,10 @@ function createDeclarativeUIServer() {
       }
 
       const apiKey = process.env.OPENAI_API_KEY!;
-      const currentPage = args.keepExisting ? currentComponentData : null;
 
       const result = await generateDeclarativeUiJson({
         userPrompt: args.prompt,
-        currentPage,
+        currentPage: null,
         apiKey
       });
 
@@ -149,8 +137,7 @@ function createDeclarativeUIServer() {
         };
       }
 
-      currentComponentData = result.uiJson;
-      console.log("[generate_declarative_ui] Data set, components:", Object.keys(result.uiJson.components));
+      console.log("[generate_declarative_ui] Generated UI with components:", Object.keys(result.uiJson.components));
 
       return {
         content: [{ type: "text", text: "Declarative UI generated and rendered successfully" }],
