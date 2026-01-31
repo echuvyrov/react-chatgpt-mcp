@@ -3,6 +3,8 @@ import { CanvasRenderer } from "declarative-ui-core";
 import { useEffect, useState } from "react";
 import type { Page } from "declarative-ui-core";
 
+console.log("[Widget] Module loaded");
+
 const emptyState: Page = {
   layout: {
     engine: "rgl",
@@ -29,31 +31,30 @@ export default function DeclarativeUIWidget() {
   const [componentData, setComponentData] = useState<Page>(emptyState);
 
   useEffect(() => {
-    console.log("[Widget] Mounted, checking for toolOutput...");
+    console.log("[Widget] Component mounted");
     
-    const updateFromToolOutput = () => {
-      const openai = (window as any).openai;
-      
-      if (!openai) {
-        console.log("[Widget] window.openai not available yet");
-        return;
-      }
-      
-      console.log("[Widget] window.openai available:", {
-        hasToolOutput: !!openai.toolOutput,
-        toolOutput: openai.toolOutput
-      });
-      
-      if (openai?.toolOutput?.componentData) {
-        console.log("[Widget] Found toolOutput.componentData, updating component data");
-        setComponentData(openai.toolOutput.componentData);
+    // Initial load from window.openai.toolOutput
+    const openai = (window as any).openai;
+    if (openai?.toolOutput?.componentData) {
+      console.log("[Widget] Initial load from toolOutput.componentData");
+      setComponentData(openai.toolOutput.componentData);
+    }
+
+    // Listen for updates via openai:set_globals event (Apps SDK pattern)
+    const handleSetGlobals = (event: any) => {
+      console.log("[Widget] openai:set_globals event received", event.detail);
+      const globals = event.detail?.globals;
+      if (globals?.toolOutput?.componentData) {
+        console.log("[Widget] Updating from set_globals event");
+        setComponentData(globals.toolOutput.componentData);
       }
     };
 
-    updateFromToolOutput();
+    window.addEventListener("openai:set_globals", handleSetGlobals, { passive: true });
 
-    const interval = setInterval(updateFromToolOutput, 100);
-    return () => clearInterval(interval);
+    return () => {
+      window.removeEventListener("openai:set_globals", handleSetGlobals);
+    };
   }, []);
 
   return (
