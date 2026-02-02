@@ -18,7 +18,7 @@
     "@mui/x-data-grid": "^8.26.0",
     "@syncfusion/ej2-react-kanban": "^32.1.24",
     "ajv": "^8.17.1",
-    "declarative-ui-core": "^2.1.2",
+    "declarative-ui-core": "^2.1.3",
     "next": "^14.2.18",
     "openai": "^4.83.0",
     "react": "^18.3.1",
