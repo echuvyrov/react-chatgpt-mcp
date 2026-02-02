@@ -5,8 +5,18 @@ import { validatePageJson } from "./validator";
 import type { GenerateResult, GenerateOptions } from "./types";
 
 function safeJsonParse(text: string): unknown {
-  const trimmed = text.trim();
+  let trimmed = text.trim();
   if (!trimmed) return null;
+  
+  // Strip markdown code fences if present
+  if (trimmed.startsWith('```')) {
+    // Remove opening fence (```json or ```)
+    trimmed = trimmed.replace(/^```(?:json)?\s*\n?/, '');
+    // Remove closing fence
+    trimmed = trimmed.replace(/\n?```\s*$/, '');
+    trimmed = trimmed.trim();
+  }
+  
   return JSON.parse(trimmed);
 }
 
