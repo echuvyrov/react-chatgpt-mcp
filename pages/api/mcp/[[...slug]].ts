@@ -69,6 +69,12 @@ function createDeclarativeUIServer() {
                 "https://raw.githubusercontent.com",
                 "https://geoserveis.icgc.cat",
                 "https://tiles.stadiamaps.com"
+              ],
+              "resource_domains": [
+                "https://tile.openstreetmap.org",
+                "https://a.tile.openstreetmap.org",
+                "https://b.tile.openstreetmap.org",
+                "https://c.tile.openstreetmap.org"
               ]
             }
           }
